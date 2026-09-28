@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From Human Priors to Autonomous Physical Knowledge Discovery</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%231f4e79'/%3E%3Cpath d='M12 4a3 3 0 0 1 3 3c0 1.2-.7 2.2-1.7 2.7l1.4 2.4c.5-.2 1-.3 1.6-.3 2 0 3.7 1.7 3.7 3.7 0 .8-.3 1.6-.8 2.1.5.5.8 1.3.8 2.1 0 2-1.7 3.7-3.7 3.7H9.7C7.7 24 6 22.3 6 20.3c0-.8.3-1.6.8-2.1-.5-.5-.8-1.3-.8-2.1 0-2 1.7-3.7 3.7-3.7.6 0 1.1.1 1.6.3l1.4-2.4A3 3 0 0 1 9 7a3 3 0 0 1 3-3z' fill='none' stroke='%23fff' stroke-width='1.4'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ink:#14283c;
+  --paper:#ffffff;
+  --bg:#f5f8fb;
+  --blue:#3b78c4;
+  --deep:#1f4e79;
+  --orange:#e8843a;
+  --line:#dde5ec;
+  --muted:#5a6b7b;
+  --soft:#eef3f8;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'IBM Plex Sans', -apple-system, 'Segoe UI', sans-serif;
+  color:var(--ink);
+  background:var(--paper);
+  line-height:1.65;
+  font-size:16px;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+a{color:var(--deep);text-decoration:none}
+section{padding:64px 0}
+section.alt{background:var(--bg)}
+h2.title{font-size:28px;font-weight:600;letter-spacing:-.01em;margin-bottom:8px}
+.kicker{font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:10px}
+.lead{color:var(--muted);font-size:17px;max-width:760px;margin-bottom:36px}
+hr.rule{border:none;border-top:1px solid var(--line);margin:0}
+
+/* ---------- hero ---------- */
+header.hero{padding:88px 0 56px;text-align:center;background:linear-gradient(180deg,#f3f8fd 0%,#ffffff 100%)}
+.hero .conf{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--deep);background:#e7f0f9;display:inline-block;padding:5px 14px;border-radius:20px;margin-bottom:26px}
+.hero h1{font-size:40px;line-height:1.2;font-weight:600;letter-spacing:-.02em;max-width:880px;margin:0 auto 22px}
+.hero .authors{color:var(--ink);font-size:16px;margin-bottom:4px}
+.hero .affil{color:var(--muted);font-size:14.5px;margin-bottom:30px}
+.placeholder-inline{color:#9a7b2f;background:#fdf6dd;border:1px dashed #d9b85a;border-radius:6px;padding:1px 8px;font-size:.92em}
+.btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:8px;font-size:15px;font-weight:500;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;transition:all .18s}
+.btn:hover{border-color:var(--blue);color:var(--deep);transform:translateY(-1px)}
+.btn.primary{background:var(--deep);color:#fff;border-color:var(--deep)}
+.btn.primary:hover{background:#173d5f;color:#fff}
+.btn svg{width:17px;height:17px;fill:currentColor}
+
+/* ---------- figures ---------- */
+figure{margin:0}
+figure img{width:100%;border:1px solid var(--line);border-radius:10px;display:block;background:#fff}
+figcaption{font-size:13.5px;color:var(--muted);margin-top:10px;text-align:center}
+.teaser{margin-top:8px}
+
+/* ---------- key numbers ---------- */
+.numgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.numcard{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px 18px;text-align:center}
+.numcard .v{font-size:32px;font-weight:600;color:var(--deep);line-height:1.1}
+.numcard .v.orange{color:var(--orange)}
+.numcard .k{font-size:13.5px;color:var(--muted);margin-top:8px}
+
+/* ---------- abstract ---------- */
+.abstract-box{background:var(--soft);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:28px 32px;font-size:16px;color:#2c4055}
+
+/* ---------- method ---------- */
+.method-row{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-bottom:56px}
+.method-row>*{min-width:0}
+.method-row:last-child{margin-bottom:0}
+.method-row.flip .m-img{order:2}
+.method-row h3{font-size:21px;font-weight:600;margin-bottom:10px}
+.method-row p{color:var(--muted);font-size:15.5px;margin-bottom:12px}
+.steps{list-style:none;counter-reset:s}
+.steps li{counter-increment:s;position:relative;padding:8px 0 8px 40px;color:#3a4d5f;font-size:15px;border-bottom:1px solid #eaf0f5}
+.steps li:last-child{border-bottom:none}
+.steps li::before{content:counter(s);position:absolute;left:0;top:9px;width:26px;height:26px;background:var(--deep);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;font-family:'IBM Plex Mono',monospace}
+.steps li b{color:var(--ink);font-weight:600}
+.tuple-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.tag{font-family:'IBM Plex Mono',monospace;font-size:12.5px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:4px 10px;color:var(--deep)}
+
+/* ---------- results ---------- */
+.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.res-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px;min-width:0}
+.res-card img{border:none;border-radius:6px}
+.res-card h4{font-size:15.5px;font-weight:600;margin-bottom:4px}
+.res-card p.note{font-size:13.5px;color:var(--muted);margin-top:8px}
+table.data{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+table.data th,table.data td{padding:9px 10px;text-align:center;border-bottom:1px solid #e8eef4}
+table.data th{background:var(--soft);font-weight:600;color:var(--deep);font-size:13px}
+table.data td:first-child,table.data th:first-child{text-align:left}
+table.data tr.ours td{background:#f0f6fc;font-weight:600;color:var(--deep)}
+.res-wide{margin-top:28px}
+
+/* ---------- gallery ---------- */
+.gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.taskcard{border:1px solid var(--line);border-radius:10px;background:#fff;padding:18px 16px;transition:all .18s}
+.taskcard:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:0 6px 18px rgba(20,40,60,.07)}
+.taskcard .t{font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--deep);font-size:13px;letter-spacing:.08em;display:block;margin-bottom:6px}
+.taskcard .d{font-size:13px;color:var(--muted);line-height:1.5}
+
+/* ---------- video ---------- */
+.video-box{aspect-ratio:16/9;border:1px solid var(--line);border-radius:12px;background:#0e2236;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:#cdd9e5}
+.video-box svg{width:52px;height:52;fill:#7fb0e0}
+.video-box span{font-size:15px}
+.video-box small{color:#7f93a8;font-size:12.5px}
+
+/* ---------- citation ---------- */
+.cite-box{position:relative;background:var(--ink);color:#d7e3ee;border-radius:12px;padding:26px 28px;font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.7;overflow-x:auto;white-space:pre}
+.copy-btn{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.12);color:#fff;border:none;border-radius:7px;padding:7px 14px;font-size:12.5px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif}
+.copy-btn:hover{background:rgba(255,255,255,.22)}
+
+/* ---------- footer / toast ---------- */
+footer{padding:40px 0;text-align:center;color:var(--muted);font-size:13.5px;border-top:1px solid var(--line)}
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:#fff;padding:11px 22px;border-radius:9px;font-size:14px;opacity:0;transition:all .3s;z-index:99;pointer-events:none}
+#toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+@media(max-width:860px){
+  .hero h1{font-size:29px}
+  .numgrid{grid-template-columns:repeat(2,1fr)}
+  .method-row,.method-row.flip{grid-template-columns:1fr;gap:22px}
+  .method-row.flip .m-img{order:0}
+  .res-grid{grid-template-columns:1fr}
+  .gallery{grid-template-columns:repeat(2,1fr)}
+  section{padding:48px 0}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+<div class="wrap">
+  <div class="conf">ICRAI 2026 &middot; International Conference on Robotics and Artificial Intelligence</div>
+  <h1>From Human Priors to Autonomous Physical Knowledge Discovery</h1>
+  <div class="authors"><span class="placeholder-inline">[Author names &mdash; replace with the full author list]</span></div>
+  <div class="affil"><span class="placeholder-inline">[Affiliations]</span></div>
+  <div class="btns">
+    <button class="btn primary" onclick="toast('Paper link will be available after camera-ready')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 7V3.5L18.5 9H13z"/></svg>Paper</button>
+    <button class="btn" onclick="toast('Code repository coming soon')"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.3-1.1.6-1.4-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.4 4.7-4.6 5 .3.3.6.9.6 1.8v2.7c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></svg>Code</button>
+    <button class="btn" onclick="document.getElementById('video').scrollIntoView()"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>Video</button>
+    <button class="btn" onclick="copyBib(this)"><svg viewBox="0 0 24 24"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg>Cite</button>
+  </div>
+</div>
+</header>
+
+<!-- ===== TEASER ===== -->
+<section style="padding-top:40px">
+<div class="wrap">
+  <figure class="teaser">
+    <img src="assets/fig1_framework.png" alt="Overall framework of human-guided physical knowledge discovery">
+    <figcaption>Figure 1. Human knowledge initializes a semantic skill library, which is grounded, executed on the robot, and refined through physical interaction into an updated, reusable skill library.</figcaption>
+  </figure>
+</div>
+</section>
+
+<!-- ===== KEY NUMBERS ===== -->
+<section class="alt">
+<div class="wrap">
+  <div class="kicker">At a glance</div>
+  <h2 class="title">What human priors buy a robot</h2>
+  <p class="lead">Starting from human-authored physical concepts, the robot reaches competitive manipulation with a fraction of the demonstrations and keeps improving on its own.</p>
+  <div class="numgrid">
+    <div class="numcard"><div class="v">5&times;</div><div class="k">fewer demos needed to match behavior cloning</div></div>
+    <div class="numcard"><div class="v">+14.8<span style="font-size:18px"> pp</span></div><div class="k">success on unseen objects vs. strongest baseline</div></div>
+    <div class="numcard"><div class="v">65.4&rarr;82.7<span style="font-size:16px">%</span></div><div class="k">autonomous refinement over 25 episodes</div></div>
+    <div class="numcard"><div class="v orange">&minus;66<span style="font-size:18px">%</span></div><div class="k">total human effort, within 2.7 pp of full-data performance</div></div>
+  </div>
+</div>
+</section>
+
+<!-- ===== ABSTRACT ===== -->
+<section id="abstract">
+<div class="wrap">
+  <div class="kicker">Abstract</div>
+  <h2 class="title">Human-verified skill refinement in robot learning</h2>
+  <div class="abstract-box">
+    Recent vision-language-action (VLA) models have advanced general-purpose robotic manipulation, but their performance remains tied to the scale of physical demonstration data, which is expensive to collect. Humans acquire manipulation skills not only through repeated practice but also through abstract understanding of physical concepts, causal relations, and task structures. We propose a human-guided physical knowledge discovery framework in which human semantic knowledge serves as a structured prior that robots acquire, refine, and reuse through physical interaction. We (1) define a semantic skill representation that encodes activation conditions, object context, goals, adaptive parameters, physical constraints, and success criteria as a structured tuple; (2) formulate a skill-grounding module that translates semantic skills into actions via a conditional diffusion policy; and (3) introduce a physical knowledge discovery mechanism in which continuous parameters are optimized via Bayesian optimization, while discrete constraints are refined through LLM-proposed rules verified by a human expert before deployment. Across eight real-world manipulation tasks on a 6-DoF manipulator, semantic prior initialization cuts the demonstrations needed to match behavior cloning by a factor of five, improves cross-object generalization by 14.8 percentage points, and autonomous refinement raises success on incompletely specified skills from 65.4% to 82.7%.
+  </div>
+</div>
+</section>
+
+<hr class="rule">
+
+<!-- ===== METHOD ===== -->
+<section id="method">
+<div class="wrap">
+  <div class="kicker">Method</div>
+  <h2 class="title">Three pieces, one closed loop</h2>
+  <p class="lead">Physical knowledge must be human-interpretable and robot-executable at the same time, then updated in both continuous and discrete spaces.</p>
+
+  <div class="method-row">
+    <div class="m-img"><figure><img src="assets/fig3_skill_tuple.png" alt="Semantic skill six-tuple"><figcaption>The semantic skill is a structured six-tuple.</figcaption></figure></div>
+    <div>
+      <h3>Semantic skill representation</h3>
+      <p>Each skill is a reusable unit of physical knowledge &mdash; not a fixed trajectory &mdash; defined as <b>S = (C, O, G, &Theta;, L, J)</b>. The same tuple grounds to different trajectories depending on the observed object, so one cutting skill covers cucumber, carrot, tofu, bread, apple, and cheese.</p>
+      <div class="tuple-tags">
+        <span class="tag">C activation</span><span class="tag">O object context</span><span class="tag">G goal</span><span class="tag">&Theta; adaptive params</span><span class="tag">L constraints &amp; logic</span><span class="tag">J success criteria</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="method-row flip">
+    <div class="m-img"><figure><img src="assets/fig6_discovery_loop.png" alt="Autonomous knowledge discovery loop"><figcaption>The execute&ndash;evaluate&ndash;update&ndash;reuse loop.</figcaption></figure></div>
+    <div>
+      <h3>Skill grounding &amp; physical knowledge discovery</h3>
+      <p>A conditional diffusion policy translates the skill embedding and observation-adapted parameters into action chunks, while an impedance controller enforces the physical constraints. After each episode, knowledge is updated in two complementary spaces:</p>
+      <ol class="steps">
+        <li><b>Continuous (GP-UCB):</b> a Gaussian process with a Mat&eacute;rn 5/2 kernel optimizes force, speed, and direction from success feedback, warm-started from the human prior.</li>
+        <li><b>Discrete (LLM + human gate):</b> on constraint-related failures, GPT-4o proposes corrected rules from the trajectory summary; a human expert verifies each rule before deployment.</li>
+        <li><b>Write-back:</b> both updates are written into the same interpretable skill, which is then reused on new objects and tasks.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ===== RESULTS ===== -->
+<section class="alt" id="results">
+<div class="wrap">
+  <div class="kicker">Experiments</div>
+  <h2 class="title">Eight real-world manipulation tasks</h2>
+  <p class="lead">All methods are compared under identical data budgets, training steps, low-level controller, and evaluation protocol (50 randomized trials per task).</p>
+
+  <div class="res-grid">
+    <div class="res-card">
+      <h4>Data efficiency</h4>
+      <img src="assets/fig4_data_efficiency.png" alt="Success rate versus demonstration budget">
+      <p class="note">With 20% of demonstrations, our method reaches 76.8% vs. 57.4% for the strongest baseline; at 10% it holds 65.4%.</p>
+    </div>
+    <div class="res-card">
+      <h4>Human effort vs. performance</h4>
+      <img src="assets/fig5_human_effort.png" alt="Human effort versus performance">
+      <p class="note">Semantic priors reach 84.9% with 6.2 h of human time &mdash; 66% less effort than the 18.5 h full-data pipeline (87.6%).</p>
+    </div>
+  </div>
+
+  <div class="res-grid res-wide">
+    <div class="res-card">
+      <h4>Cross-object generalization</h4>
+      <table class="data">
+        <tr><th>Method</th><th>Seen</th><th>Novel</th><th>Retention</th></tr>
+        <tr><td>BC</td><td>79.3</td><td>49.8</td><td>62.8%</td></tr>
+        <tr><td>Diffusion Policy</td><td>82.1</td><td>57.4</td><td>69.9%</td></tr>
+        <tr><td>OpenVLA</td><td>84.6</td><td>63.7</td><td>75.3%</td></tr>
+        <tr class="ours"><td>Ours</td><td>89.1</td><td>78.5</td><td>88.1%</td></tr>
+      </table>
+      <p class="note">Trained on one object per task (e.g., apple), tested on five unseen objects without extra demos.</p>
+    </div>
+    <div class="res-card">
+      <h4>Autonomous knowledge refinement</h4>
+      <table class="data">
+        <tr><th>Method</th><th>Initial</th><th>After 25 eps</th></tr>
+        <tr><td>Human prior only</td><td>65.4</td><td>65.4</td></tr>
+        <tr><td>RL exploration (PPO)</td><td>65.4</td><td>71.4</td></tr>
+        <tr class="ours"><td>Ours (GP-UCB + LLM)</td><td>65.4</td><td>82.7</td></tr>
+      </table>
+      <p class="note">Starting from deliberately incomplete skills, e.g. the GP raises cutting force from 15 N to 22 N for carrots and the LLM adds a blade-angle rule.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ===== TASK GALLERY ===== -->
+<section id="gallery">
+<div class="wrap">
+  <div class="kicker">Task gallery</div>
+  <h2 class="title">The eight tasks</h2>
+  <p class="lead">Eight tasks spanning contact dynamics, gravity and containment, geometric constraints, and fine motion control.</p>
+  <div class="gallery">
+    <div class="taskcard"><span class="t">CUT</span><span class="d">Contact dynamics &amp; force control</span></div>
+    <div class="taskcard"><span class="t">POUR</span><span class="d">Gravity &amp; containment</span></div>
+    <div class="taskcard"><span class="t">STIR</span><span class="d">Continuous interaction</span></div>
+    <div class="taskcard"><span class="t">PLACE</span><span class="d">Spatial alignment</span></div>
+    <div class="taskcard"><span class="t">INSERT</span><span class="d">Geometric constraint</span></div>
+    <div class="taskcard"><span class="t">PUSH</span><span class="d">Contact reasoning</span></div>
+    <div class="taskcard"><span class="t">WRITE</span><span class="d">Fine motion adaptation</span></div>
+    <div class="taskcard"><span class="t">DISCARD</span><span class="d">Goal-oriented manipulation</span></div>
+  </div>
+</div>
+</section>
+
+<!-- ===== VIDEO ===== -->
+<section class="alt" id="video">
+<div class="wrap">
+  <div class="kicker">Video</div>
+  <h2 class="title">Watch the discovery loop</h2>
+  <div class="video-box">
+    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    <span>Supplementary video placeholder</span>
+    <small>Embed an .mp4 here or link the conference video when ready.</small>
+  </div>
+</div>
+</section>
+
+<!-- ===== CITATION ===== -->
+<section id="citation">
+<div class="wrap">
+  <div class="kicker">Citation</div>
+  <h2 class="title">BibTeX</h2>
+  <div class="cite-box" id="bib">@inproceedings{humanpriors2026,
+  title     = {From Human Priors to Autonomous Physical Knowledge
+               Discovery: Human-Verified Skill Refinement in Robot Learning},
+  author    = {[Author names]},
+  booktitle = {Proc. of the Intl. Conference on Robotics and
+               Artificial Intelligence (ICRAI)},
+  year      = {2026}
+}<button class="copy-btn" onclick="copyBib(this)">Copy</button></div>
+</div>
+</section>
+
+<footer>
+<div class="wrap">
+  From Human Priors to Autonomous Physical Knowledge Discovery &middot; ICRAI 2026<br>
+  <span style="font-size:12.5px">Contact: [your email] &middot; Replace bracketed placeholders before publishing.</span>
+</div>
+</footer>
+
+<div id="toast"></div>
+<script>
+var t;
+function toast(msg){
+  var el=document.getElementById('toast');
+  el.textContent=msg;
+  el.classList.add('show');
+  clearTimeout(t);
+  t=setTimeout(function(){el.classList.remove('show')},2200);
+}
+function copyBib(btn){
+  var text=document.getElementById('bib').innerText.replace('Copy','').trim();
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){toast('BibTeX copied to clipboard')},
+      function(){fallbackCopy(text)});
+  } else { fallbackCopy(text); }
+}
+function fallbackCopy(text){
+  var ta=document.createElement('textarea');
+  ta.value=text;document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');toast('BibTeX copied to clipboard')}catch(e){toast('Copy failed - select manually')}
+  document.body.removeChild(ta);
+}
+</script>
+
+<!-- section-anchor -->
+<div id="overview"></div>
+</body>
+</html>
